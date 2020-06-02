@@ -6,13 +6,10 @@
 # @Site : 
 # @File : main.py
 # @Software: PyCharm
+# @File description:
 
-import os
-import struct
-import numpy as np
-import scipy.special
-from DataProcessFun import *
-from ManQiNeuralNetworks import *
+from data_process_fun import *
+from manqi_neural_networks import *
 import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
@@ -21,9 +18,10 @@ if __name__ == '__main__':
     hidden_nodes = 100
     output_nodes = 10
     learning_rate = 0.01
+    classes_num = 10
 
     # 声明网络
-    sess = Sess_NN()
+    sess = ManQiNeuralNetwork()
     # 定义输入尺寸
     sess.input_node = input_nodes
     # 定义网络结构
@@ -35,18 +33,18 @@ if __name__ == '__main__':
     sess.fun_init_graph()
 
     # 读入训练数据
-    x_train, y_train = LoadData('', kind='train')
+    x_train, y_train = LoadData('./DataSet', kind='train')
     # 读入测试数据
-    x_test, y_test = LoadData('', kind='t10k')
+    x_test, y_test = LoadData('./DataSet', kind='t10k')
     test_num = y_test.shape[0]
-    x_test_oned, _ = PreprocessDataSet(x_test, y_test)
+    x_test_oned, _ = PreprocessDataSet(x_test, y_test, classes_num)
     y_test = [int(i) for i in y_test]
 
     batch_size = 64
     for idx, epoch in enumerate(gen_epochs(40, x_train, y_train, batch_size=batch_size)):
         print('------------第 %d 轮迭代------------' % idx)
         for step, (X, Y) in enumerate(epoch):
-            x_train_oned, y_train_onehot = PreprocessDataSet(X, Y)
+            x_train_oned, y_train_onehot = PreprocessDataSet(X, Y, classes_num)
 
             out = sess.train(x_train_oned)
             loss = y_train_onehot - out

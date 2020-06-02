@@ -4,8 +4,12 @@
 # @Author : ManQi
 # @E-mail : zehuadu@126.com
 # @Site : 
-# @File : DataProcessFun.py
+# @File : data_process_fun.py
 # @Software: PyCharm
+"""
+File description:
+该函数包含神经网络以外的基本数据处理操作，用于方便的进行主函数代码编写。
+"""
 
 import os
 import struct
@@ -64,11 +68,12 @@ def CountSameNum(list1, list2):
     return count
 
 
-def PreprocessDataSet(DataX, DataY):
+def PreprocessDataSet(DataX, DataY, classes_num):
     """
     对输入的样本数据做0-1归一化处理，对输入的标签数据进行one-hot编码
     :param DataX: 输入的样本数据
     :param DataY: 输入的标签数据
+    :param classes_num: 类别数
     :return: 归一化后的样本数据和one-hot编码的标签数据
     """
     '对从二进制文件直接解析读取的数据集进行特征样本的归一化和标签的0-1化'
@@ -82,7 +87,7 @@ def PreprocessDataSet(DataX, DataY):
     rows_min_mat = np.tile(rows_min, (1, DataX_shape[1]))
 
     DataX_oned = (DataX - rows_min_mat) / (rows_max_mat - rows_min_mat)
-    DataY_onehot = TurnToOneHotLabel(DataY)
+    DataY_onehot = TurnToOneHotLabel(DataY, classes_num)
 
     return np.array(DataX_oned, ndmin=2), np.array(DataY_onehot, ndmin=2)
 
