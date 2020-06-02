@@ -50,7 +50,7 @@ if __name__ == '__main__':
 
             out = sess.train(x_train_oned)
             loss = y_train_onehot - out
-            sess.fun_optimization(loss, learning_rate)
+            sess.fun_optimization(loss, 'GradientDescent', learning_rate)
 
             # 读入图片显示
             # for i in range(batch_size):
